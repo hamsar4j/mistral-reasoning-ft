@@ -7,3 +7,7 @@ torch
 protobuf
 peft
 sentencepiece
+trl
+unsloth
+flash-attn
+pydantic
