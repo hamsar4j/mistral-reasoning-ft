@@ -13,18 +13,12 @@ def setup_model(model_config: ModelConfig, lora_config: LoraConfig):
         model_config.model_id,
         quantization_config=model_config.get_quantization_config(),
         attn_implementation=model_config.attn_implementation,
+        use_cache=model_config.use_cache,
     )
 
-    tokenizer = AutoTokenizer.from_pretrained(model_config.model_id)
-
-    # add custom special tokens
-    special_tokens = {
-        "additional_special_tokens": ["<think>", "</think>", "<answer>", "</answer>"]
-    }
-    tokenizer.add_special_tokens(special_tokens)
-
-    # resize model embeddings to accommodate new tokens
-    model.resize_token_embeddings(len(tokenizer))
+    tokenizer = AutoTokenizer.from_pretrained(model_config.model_id, use_fast=True)
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
 
     model = prepare_model_for_kbit_training(model)
     peft_model = get_peft_model(model, lora_config.get_lora_config())

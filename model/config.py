@@ -12,6 +12,7 @@ class ModelConfig:
     bnb_4bit_quant_type: str = "nf4"
     bnb_4bit_use_double_quant: bool = True
     attn_implementation: str = "flash_attention_2"
+    use_cache: bool = False
 
     def get_quantization_config(self) -> BitsAndBytesConfig:
         return BitsAndBytesConfig(
@@ -20,6 +21,7 @@ class ModelConfig:
             bnb_4bit_quant_type=self.bnb_4bit_quant_type,
             bnb_4bit_use_double_quant=self.bnb_4bit_use_double_quant,
             attn_implementation=self.attn_implementation,
+            use_cache=self.use_cache,
         )
 
 
