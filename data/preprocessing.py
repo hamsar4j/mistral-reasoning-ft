@@ -10,7 +10,7 @@ def process_cot_example(
     question = example["question"]
     answer = example["deepseek_attempt"]
 
-    thinking = "\n".join(thinking_trajectory).strip()
+    thinking = thinking_trajectory.strip()
     answer = "Answer: " + answer if "Answer:" not in answer else answer
 
     assistant_text = "<think>\n" + thinking + "\n</think>\n" + answer.strip()
