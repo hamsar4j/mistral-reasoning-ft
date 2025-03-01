@@ -6,6 +6,7 @@ def process_cot_example(
     example: Dict,
     tokenizer,
 ):
+    print("Updated process_cot_example is being used!")
     thinking_trajectory = example["deepseek_thinking_trajectory"]
     question = example["question"]
     answer = example["deepseek_attempt"]
@@ -13,7 +14,14 @@ def process_cot_example(
     thinking = thinking_trajectory.strip()
     answer = "Answer: " + answer if "Answer:" not in answer else answer
 
-    assistant_text = "<think>\n" + thinking + "\n</think>\n" + answer.strip()
+    assistant_text = (
+        "<think>\n"
+        + thinking
+        + "\n</think>\n"
+        + "\n<answer>\n"
+        + answer.strip()
+        + "\n</answer>\n"
+    )
 
     text = tokenizer.apply_chat_template(
         [

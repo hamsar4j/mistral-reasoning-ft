@@ -18,7 +18,9 @@ def setup_model(model_config: ModelConfig, lora_config: LoraConfig):
     tokenizer = AutoTokenizer.from_pretrained(model_config.model_id)
 
     # add custom special tokens
-    special_tokens = {"additional_special_tokens": ["<think>", "</think>"]}
+    special_tokens = {
+        "additional_special_tokens": ["<think>", "</think>", "<answer>", "</answer>"]
+    }
     tokenizer.add_special_tokens(special_tokens)
 
     # resize model embeddings to accommodate new tokens

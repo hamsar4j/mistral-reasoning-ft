@@ -24,6 +24,7 @@ def train():
 
     logger.info("Preprocessing training data...")
     processed_train_ds = preprocess_dataset(train_ds, tokenizer, process_cot_example)
+    logger.info(f"Processed Training Data Example: {processed_train_ds[0]}")
 
     logger.info("Starting trainer...")
     trainer = setup_trainer(model, processed_train_ds, training_config)

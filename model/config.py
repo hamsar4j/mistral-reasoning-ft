@@ -46,7 +46,7 @@ class LoRAConfig:
 @dataclass
 class TrainingConfig:
     output_dir: str = "models/mistral-7b-reasoning-lora"
-    num_train_epochs: int = 2
+    num_train_epochs: int = 5
     per_device_train_batch_size: int = 8
     learning_rate: float = 2e-5
     logging_steps: int = 10
