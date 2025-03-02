@@ -11,9 +11,11 @@ def process_cot_example(
     question = example["question"]
     answer = example["deepseek_attempt"]
 
+    thinking = thinking_trajectory.strip().replace("\n\n", "\n")
+
     assistant_text = (
         "<think>\n"
-        + thinking_trajectory.strip()
+        + thinking
         + "\n</think>\n"
         + "\n<answer>\n"
         + answer.strip()

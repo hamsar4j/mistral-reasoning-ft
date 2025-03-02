@@ -14,6 +14,8 @@ def setup_model(model_config: ModelConfig, lora_config: LoraConfig):
         quantization_config=model_config.get_quantization_config(),
         attn_implementation=model_config.attn_implementation,
         use_cache=model_config.use_cache,
+        device_map=model_config.device_map,
+        torch_dtype=model_config.torch_dtype,
     )
 
     tokenizer = AutoTokenizer.from_pretrained(model_config.model_id, use_fast=True)

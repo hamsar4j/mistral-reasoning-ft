@@ -17,7 +17,7 @@ def load_model_for_inference(model_config: ModelConfig, adapter_path: str):
 
     # load adapter
     model = PeftModel.from_pretrained(base_model, adapter_path)
-    # model = model.merge_and_unload()
+    model = model.merge_and_unload()
 
     model.eval()
 
@@ -33,8 +33,10 @@ def generate_response(model, tokenizer, prompt: str):
         input_ids=inputs,
         max_new_tokens=32768,
         do_sample=True,
-        temperature=0.5,
+        temperature=0.7,
         top_p=0.9,
     )
-    response = tokenizer.decode(outputs[0][inputs.shape[1] :], skip_special_tokens=True)
+    response = tokenizer.decode(
+        outputs[0][inputs.shape[1] :], skip_special_tokens=False
+    )
     return response
