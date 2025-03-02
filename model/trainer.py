@@ -1,6 +1,6 @@
 from .config import ModelConfig
-from transformers import TrainingArguments, AutoTokenizer
-from trl import SFTTrainer
+from transformers import AutoTokenizer
+from trl import SFTTrainer, SFTConfig
 from peft import get_peft_model, LoraConfig
 from transformers import AutoModelForCausalLM
 from peft import prepare_model_for_kbit_training, get_peft_model
@@ -31,7 +31,7 @@ def setup_model(model_config: ModelConfig, lora_config: LoraConfig):
 def setup_trainer(
     model,
     train_dataset: Dataset,
-    training_config: TrainingArguments,
+    training_config: SFTConfig,
 ):
 
     training_args = training_config.get_training_args()

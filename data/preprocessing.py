@@ -6,7 +6,6 @@ def process_cot_example(
     example: Dict,
     tokenizer,
 ):
-    print("Updated process_cot_example is being used!")
     thinking_trajectory = example["deepseek_thinking_trajectory"]
     question = example["question"]
     answer = example["deepseek_attempt"]
@@ -44,5 +43,6 @@ def preprocess_dataset(
         lambda x: processing_function(x, tokenizer),
         batched=False,
         remove_columns=dataset.column_names,
+        load_from_cache_file=False,
     )
     return processed_dataset

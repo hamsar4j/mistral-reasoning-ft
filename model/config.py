@@ -1,6 +1,7 @@
 import torch
-from transformers import BitsAndBytesConfig, TrainingArguments
+from transformers import BitsAndBytesConfig
 from peft import LoraConfig
+from trl import SFTConfig
 from dataclasses import dataclass, field
 
 
@@ -29,7 +30,7 @@ class ModelConfig:
 
 @dataclass
 class LoRAConfig:
-    r: int = 32
+    r: int = 16
     lora_alpha: int = 16
     lora_dropout: float = 0.05
     target_modules: list = field(
@@ -73,8 +74,8 @@ class TrainingConfig:
     gradient_checkpointing: bool = True
     max_seq_length: int = 2048
 
-    def get_training_args(self) -> TrainingArguments:
-        return TrainingArguments(
+    def get_training_args(self) -> SFTConfig:
+        return SFTConfig(
             output_dir=self.output_dir,
             num_train_epochs=self.num_train_epochs,
             per_device_train_batch_size=self.per_device_train_batch_size,
