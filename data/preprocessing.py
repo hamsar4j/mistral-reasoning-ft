@@ -1,29 +1,40 @@
 from typing import Dict
 from datasets import Dataset
+import re
+
+
+def preprocess(text):
+    if text is None:
+        return " "
+    text = text.strip()
+    text = text.replace(" [title]", ". ")
+    text = re.sub(r"\[.*?\]", "", text)
+    text = text.replace("  ", " ")
+    return text
 
 
 def process_cot_example(
     example: Dict,
     tokenizer,
 ):
-    thinking_trajectory = example["deepseek_thinking_trajectory"]
-    question = example["question"]
-    answer = example["deepseek_attempt"]
+    thinking_trajectory = preprocess(example["deepseek_thinking_trajectory"])
+    question = preprocess(example["question"])
+    answer = preprocess(example["deepseek_attempt"])
 
-    thinking = thinking_trajectory.strip().replace("\n\n", "\n")
+    thinking = thinking_trajectory.replace("\n\n", "\n")
 
     assistant_text = (
-        "<think>\n"
+        "[THINK]\n"
         + thinking
-        + "\n</think>\n"
-        + "\n<answer>\n"
-        + answer.strip()
-        + "\n</answer>\n"
+        + "\n[/THINK]\n"
+        + "\n[ANSWER]\n"
+        + answer
+        + "\n[/ANSWER]\n"
     )
 
     text = tokenizer.apply_chat_template(
         [
-            {"role": "user", "content": question.strip()},
+            {"role": "user", "content": question},
             {
                 "role": "assistant",
                 "content": assistant_text,
