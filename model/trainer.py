@@ -1,29 +1,28 @@
 from .config import ModelConfig
-from transformers import AutoTokenizer
 from trl import SFTTrainer, SFTConfig
-from peft import get_peft_model, LoraConfig
-from transformers import AutoModelForCausalLM
-from peft import prepare_model_for_kbit_training, get_peft_model
+from peft import LoraConfig
 from datasets import Dataset
+from unsloth import FastLanguageModel
 
 
 def setup_model(model_config: ModelConfig, lora_config: LoraConfig):
 
-    model = AutoModelForCausalLM.from_pretrained(
-        model_config.model_id,
-        quantization_config=model_config.get_quantization_config(),
+    model, tokenizer = FastLanguageModel.from_pretrained(
+        model_name=model_config.model_id,
+        load_in_4bit=model_config.load_in_4bit,
         attn_implementation=model_config.attn_implementation,
         use_cache=model_config.use_cache,
         device_map=model_config.device_map,
         torch_dtype=model_config.torch_dtype,
+        max_seq_length=model_config.max_seq_length,
     )
 
-    tokenizer = AutoTokenizer.from_pretrained(model_config.model_id, use_fast=True)
-    if tokenizer.pad_token is None:
-        tokenizer.pad_token = tokenizer.eos_token
-
-    model = prepare_model_for_kbit_training(model)
-    peft_model = get_peft_model(model, lora_config.get_lora_config())
+    peft_model = FastLanguageModel.get_peft_model(
+        model,
+        lora_config.get_lora_config(),
+        random_state=lora_config.random_state,
+        use_gradient_checkpointing=lora_config.use_gradient_checkpointing,
+    )
 
     return peft_model, tokenizer
 
