@@ -27,7 +27,7 @@ def train():
     logger.info(f"Processed Training Data Example: {processed_train_ds[0]}")
 
     logger.info("Starting trainer...")
-    trainer = setup_trainer(model, processed_train_ds, training_config)
+    trainer = setup_trainer(model, tokenizer, processed_train_ds, training_config)
 
     trainer.train()
     trainer.save_model(training_config.output_dir)

@@ -2,6 +2,7 @@ import torch
 from peft import LoraConfig
 from trl import SFTConfig
 from dataclasses import dataclass, field
+from unsloth import is_bfloat16_supported
 
 
 @dataclass
@@ -13,7 +14,7 @@ class ModelConfig:
     attn_implementation: str = "flash_attention_2"
     use_cache: bool = False
     device_map: str = "auto"
-    torch_dtype: torch.dtype = "auto"
+    dtype: str = "None"
     max_seq_length: int = 32768
 
 
@@ -37,21 +38,12 @@ class LoRAConfig:
     use_gradient_checkpointing: str = "unsloth"
     random_state: int = 3407
 
-    def get_lora_config(self) -> LoraConfig:
-        return LoraConfig(
-            r=self.r,
-            lora_alpha=self.lora_alpha,
-            lora_dropout=self.lora_dropout,
-            bias=self.bias,
-            target_modules=self.target_modules,
-        )
-
 
 @dataclass
 class TrainingConfig:
     output_dir: str = "models/mistral-7b-reasoning-lora"
     num_train_epochs: int = 1
-    per_device_train_batch_size: int = 2
+    per_device_train_batch_size: int = 1
     learning_rate: float = 1e-4
     logging_steps: int = 5
     optim: str = "adamw_8bit"
@@ -59,8 +51,10 @@ class TrainingConfig:
     lr_scheduler_type: str = "linear"
     save_strategy: str = "epoch"
     warmup_ratio: float = 0.1
-    gradient_accumulation_steps: int = 4
-    max_seq_length: int = 32768
+    gradient_accumulation_steps: int = 8
+    max_seq_length: int = 16000
+    fp16: bool = not is_bfloat16_supported()
+    bf16: bool = is_bfloat16_supported()
 
     def get_training_args(self) -> SFTConfig:
         return SFTConfig(
@@ -76,4 +70,6 @@ class TrainingConfig:
             warmup_ratio=self.warmup_ratio,
             gradient_accumulation_steps=self.gradient_accumulation_steps,
             max_seq_length=self.max_seq_length,
+            fp16=self.fp16,
+            bf16=self.bf16,
         )

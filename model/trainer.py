@@ -13,15 +13,19 @@ def setup_model(model_config: ModelConfig, lora_config: LoraConfig):
         attn_implementation=model_config.attn_implementation,
         use_cache=model_config.use_cache,
         device_map=model_config.device_map,
-        torch_dtype=model_config.torch_dtype,
+        dtype=model_config.dtype,
         max_seq_length=model_config.max_seq_length,
     )
 
     peft_model = FastLanguageModel.get_peft_model(
         model,
-        lora_config.get_lora_config(),
-        random_state=lora_config.random_state,
+        r=lora_config.r,
+        lora_alpha=lora_config.lora_alpha,
+        lora_dropout=lora_config.lora_dropout,
+        bias=lora_config.bias,
+        target_modules=lora_config.target_modules,
         use_gradient_checkpointing=lora_config.use_gradient_checkpointing,
+        random_state=lora_config.random_state,
     )
 
     return peft_model, tokenizer
@@ -29,6 +33,7 @@ def setup_model(model_config: ModelConfig, lora_config: LoraConfig):
 
 def setup_trainer(
     model,
+    tokenizer,
     train_dataset: Dataset,
     training_config: SFTConfig,
 ):
@@ -37,8 +42,9 @@ def setup_trainer(
 
     trainer = SFTTrainer(
         model=model,
-        args=training_args,
+        tokenizer=tokenizer,
         train_dataset=train_dataset,
+        args=training_args,
     )
 
     return trainer
