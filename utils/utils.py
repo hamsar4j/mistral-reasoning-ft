@@ -5,10 +5,10 @@ import logging
 
 def load_training_dataset(dataset_path: str):
     if os.path.exists(dataset_path):
-        return load_dataset(dataset_path)
+        return load_dataset(dataset_path, "socratic")
     else:
         # from hf hub
-        return load_dataset(dataset_path)["train"]
+        return load_dataset(dataset_path, "socratic")["train"]
 
 
 def setup_logging():

@@ -1,5 +1,3 @@
-import torch
-from peft import LoraConfig
 from trl import SFTConfig
 from dataclasses import dataclass, field
 from unsloth import is_bfloat16_supported
@@ -15,7 +13,7 @@ class ModelConfig:
     use_cache: bool = False
     device_map: str = "auto"
     dtype: str = "None"
-    max_seq_length: int = 32768
+    max_seq_length: int = 2048
 
 
 @dataclass
@@ -43,16 +41,16 @@ class LoRAConfig:
 class TrainingConfig:
     output_dir: str = "models/mistral-7b-reasoning-lora"
     num_train_epochs: int = 1
-    per_device_train_batch_size: int = 1
-    learning_rate: float = 1e-4
-    logging_steps: int = 5
+    per_device_train_batch_size: int = 8
+    learning_rate: float = 2e-4
+    logging_steps: int = 10
     optim: str = "adamw_8bit"
     weight_decay: float = 0.05
     lr_scheduler_type: str = "linear"
     save_strategy: str = "epoch"
     warmup_ratio: float = 0.1
-    gradient_accumulation_steps: int = 8
-    max_seq_length: int = 16000
+    gradient_accumulation_steps: int = 4
+    max_seq_length: int = 2048
     fp16: bool = not is_bfloat16_supported()
     bf16: bool = is_bfloat16_supported()
 

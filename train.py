@@ -14,7 +14,7 @@ def train():
     lora_config = LoRAConfig()
     training_config = TrainingConfig()
 
-    dataset_path = "simplescaling/s1K-1.1"
+    dataset_path = "openai/gsm8k"
 
     logger.info(f"Loading model: {model_config.model_id}")
     model, tokenizer = setup_model(model_config, lora_config)

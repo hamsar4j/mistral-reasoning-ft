@@ -7,9 +7,7 @@ def preprocess(text):
     if text is None:
         return " "
     text = text.strip()
-    text = text.replace(" [title]", ". ")
-    text = re.sub(r"\[.*?\]", "", text)
-    text = text.replace("  ", " ")
+    text = re.sub(r"\s+", " ", text)
     return text
 
 
@@ -17,11 +15,12 @@ def process_cot_example(
     example: Dict,
     tokenizer,
 ):
-    thinking_trajectory = preprocess(example["deepseek_thinking_trajectory"])
     question = preprocess(example["question"])
-    answer = preprocess(example["deepseek_attempt"])
+    attempt = preprocess(example["answer"])
 
-    thinking = thinking_trajectory.replace("\n\n", "\n")
+    answer_parts = attempt.split("####")
+    thinking = answer_parts[0].strip()
+    answer = answer_parts[1].strip() if len(answer_parts) > 1 else ""
 
     assistant_text = (
         "[THINK]\n"
