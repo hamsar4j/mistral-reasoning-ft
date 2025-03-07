@@ -18,7 +18,7 @@ class ModelConfig:
 
 @dataclass
 class LoRAConfig:
-    r: int = 16
+    r: int = 64
     lora_alpha: int = 16
     lora_dropout: float = 0
     bias: str = "none"
@@ -42,11 +42,11 @@ class TrainingConfig:
     output_dir: str = "models/mistral-7b-reasoning-lora"
     num_train_epochs: int = 1
     per_device_train_batch_size: int = 8
-    learning_rate: float = 2e-4
+    learning_rate: float = 2e-5
     logging_steps: int = 10
     optim: str = "adamw_8bit"
     weight_decay: float = 0.05
-    lr_scheduler_type: str = "linear"
+    lr_scheduler_type: str = "cosine"
     save_strategy: str = "epoch"
     warmup_ratio: float = 0.1
     gradient_accumulation_steps: int = 4
