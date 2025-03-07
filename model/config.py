@@ -42,7 +42,7 @@ class TrainingConfig:
     output_dir: str = "models/mistral-7b-reasoning-lora"
     num_train_epochs: int = 1
     per_device_train_batch_size: int = 8
-    learning_rate: float = 2e-5
+    learning_rate: float = 5e-6
     logging_steps: int = 10
     optim: str = "adamw_8bit"
     weight_decay: float = 0.05
