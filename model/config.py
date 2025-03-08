@@ -41,15 +41,15 @@ class LoRAConfig:
 class TrainingConfig:
     output_dir: str = "models/mistral-7b-reasoning-lora"
     num_train_epochs: int = 1
-    per_device_train_batch_size: int = 8
-    learning_rate: float = 5e-6
+    per_device_train_batch_size: int = 16
+    learning_rate: float = 1e-4
     logging_steps: int = 10
     optim: str = "adamw_8bit"
     weight_decay: float = 0.05
-    lr_scheduler_type: str = "cosine"
+    lr_scheduler_type: str = "linear"
     save_strategy: str = "epoch"
     warmup_ratio: float = 0.1
-    gradient_accumulation_steps: int = 4
+    gradient_accumulation_steps: int = 1
     max_seq_length: int = 2048
     fp16: bool = not is_bfloat16_supported()
     bf16: bool = is_bfloat16_supported()

@@ -16,7 +16,7 @@ def run_inference():
     model, tokenizer = load_model_for_inference(model_config, adapter_path)
     logger.info("Model loaded successfully")
 
-    prompt = "What is the capital of France?"
+    prompt = "How many 'r' are there in the word 'strawberry'? Think before answering."
 
     response = generate_response(model, tokenizer, prompt)
     print(response)
