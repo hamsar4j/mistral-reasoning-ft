@@ -16,7 +16,7 @@ def run_inference():
     model, tokenizer = load_model_for_inference(model_config, adapter_path)
     logger.info("Model loaded successfully")
 
-    prompt = "How many 'r' are there in the word 'strawberry'? Think before answering."
+    prompt = "If a rectangle has length 5 and width 3, what is its area? Reason before answering."
 
     response = generate_response(model, tokenizer, prompt)
     print(response)

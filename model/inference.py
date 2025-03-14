@@ -31,8 +31,8 @@ def generate_response(model, tokenizer, prompt: str):
         temperature=0.6,
         min_p=0.95,
     )
-    response = tokenizer.decode(
-        outputs[0][inputs.shape[1] :], skip_special_tokens=False
-    )
-    # response = tokenizer.batch_decode(outputs)
+    # response = tokenizer.decode(
+    #     outputs[0][inputs.shape[1] :], skip_special_tokens=False
+    # )
+    response = tokenizer.batch_decode(outputs)
     return response
